@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<style>
+    .mid {
+        width: 260px;
+        height: 70px;
+        padding: 10px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -130px;
+        margin-top: -35px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .bt {
+        margin-right: 5px;
+        font-size: x-large;
+    }
+    body{
+        background-color: #141414;
+    }
+</style>
+<body>
+<div id="app">
+
+
+    <div class="mid">
+        <button class="btn btn-success bt" @Click="ledOn">turn On/Off</button>
+
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+        },
+        methods: {
+            ledOn() {
+                axios({
+                    method: 'post',
+                    url: '/ledOn',
+                }).then(function (response) {
+                    if (response.data == "OK") {
+                        alert("Signal accepted")
+                    } else {
+                        alert("Unsuccessful!")
+                    }
+                });
+            },
+
+
+        }
+    });
+
+</script>
+</html>
