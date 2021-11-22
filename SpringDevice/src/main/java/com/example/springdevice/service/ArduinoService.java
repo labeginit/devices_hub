@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArduinoService implements ArduinoConnect{
     SpringDeviceApplication one = new SpringDeviceApplication();
-   private static final Arduino AdruinoCon = new Arduino("COM3", 9600);
+    private static final Arduino AdruinoCon = new Arduino("COM3", 9600);
     private boolean isOn; // state of the led
     String[] commands = {"off", "on"}; // commands that adruino can recognize
     @Override
