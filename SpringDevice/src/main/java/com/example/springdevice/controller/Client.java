@@ -12,7 +12,8 @@ import java.net.http.HttpResponse;
 public class Client {
     //server: 194.47.41.141
     //server port: 1337
-    private String baseAddress = "http://194.47.40.108:1337/";
+    //private String baseAddress = "http://194.47.40.108:1337/";
+    private String localBase = "http://localhost:1337/";
 
     //private WebTarget webTarget; //Will use it then
 
@@ -31,7 +32,7 @@ public class Client {
         // add json header
         java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
                 .POST(java.net.http.HttpRequest.BodyPublishers.ofString(message))
-                .uri(URI.create(baseAddress + "sendConfirmation2"))
+                .uri(URI.create(localBase + "sendConfirmation2"))
                 .setHeader("User-Agent", "Java 11 HttpClient Bot") // add request header
                 .header("Content-Type", "application/json")
                 .build();
