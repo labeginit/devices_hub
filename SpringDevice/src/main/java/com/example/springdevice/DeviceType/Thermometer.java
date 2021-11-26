@@ -1,7 +1,6 @@
 package com.example.springdevice.DeviceType;
 
 public class Thermometer {
-
     double temperature;
     String deviceID;
 

@@ -1,7 +1,6 @@
 package com.example.springdevice.DeviceType;
 
 public class Fan {
-
     private String deviceID;
     private int speed;
 

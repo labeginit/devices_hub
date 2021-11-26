@@ -1,11 +1,8 @@
 package com.example.springdevice.DeviceType;
 
-
 import java.util.ArrayList;
 
-public class SmartHouse {
-
-    private static SmartHouse smartHouse = null;
+public class SmartHouse { private static SmartHouse smartHouse = null;
 
     ArrayList<Lamp> lampList;
     ArrayList<Fan> fanList;
@@ -58,7 +55,7 @@ public class SmartHouse {
         this.fanList.add(fan);
     }
 
-    public void addCurtain(Alarm alarm) {
+    public void addAlarm(Alarm alarm) {
         this.alarmList.add(alarm);
     }
 
@@ -71,7 +68,7 @@ public class SmartHouse {
         return "SmartHouse{" +
                 "lampList=" + lampList.toString() +
                 ", fanList=" + fanList +
-                ", curtainList=" + alarmList +
+                ", AlarmList=" + alarmList +
                 ", temperatureSensorList=" + temperatureSensorList +
                 '}';
     }
