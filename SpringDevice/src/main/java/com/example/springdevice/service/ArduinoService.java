@@ -25,12 +25,11 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
     /** Default bits per second for COM port. */
     private static final int DATA_RATE = 9600;
     SpringDeviceApplication one = new SpringDeviceApplication();
-<<<<<<< HEAD
+
     private static final String[] PORT_NAMES = {"COM4"};//ändra här om COM strular och säger tex COM3 istället för COM4
    private static final Arduino AdruinoCon = new Arduino("COM4", 9600);
-=======
-    private static final Arduino AdruinoCon = new Arduino("COM3", 9600);
->>>>>>> df70729394e0c4666ed854f14a80db0f9c4265a2
+
+
     private boolean isOn; // state of the led
     String[] commands = {"off", "on"}; // commands that adruino can recognize
     String[] commandsInside = {"insideOff", "insideOn"};
