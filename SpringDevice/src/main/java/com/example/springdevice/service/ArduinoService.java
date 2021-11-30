@@ -13,7 +13,6 @@ public class ArduinoService implements ArduinoConnect{
     @Override
     public void ledOn(){
         AdruinoCon.openConnection(); //open connection
-
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB
@@ -23,7 +22,7 @@ public class ArduinoService implements ArduinoConnect{
 
     @Override
     public void ledOff() {
-//        AdruinoCon.openConnection();
+        AdruinoCon.openConnection();
         this.isOn = false; // if the current state is TRUE we set it to FALSE
         int commandIndex =  0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB

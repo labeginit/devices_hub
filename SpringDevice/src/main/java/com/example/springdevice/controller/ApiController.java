@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
+/*
 @RestController
 public class ApiController {
 private Client client;
@@ -77,7 +77,7 @@ return "something went wrong";
         return result;
 
 
-    }
+    }*/
 //    @RequestMapping(value = "/import", method = RequestMethod.POST)
 //    public String handleFileUpload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 //        String name = multipartFile.getOriginalFilename();
@@ -86,7 +86,7 @@ return "something went wrong";
 //        System.out.println("File uploaded content:\n" + new String(bytes));
 //        return "file uploaded";
 //    }
-    }
+    //}
 
 
 
