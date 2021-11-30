@@ -90,8 +90,7 @@ public class MyClient {
             Gson gson = new Gson();
             //sending false to us wont work sending null or anything else instead will work
 
-            Lamp lamp = gson.fromJson(payload, Lamp.class);
-            System.out.println("LAMMMMMMMMMMMP" + lamp);
+            System.out.println("LAMMMMMMMMMMMP");
             System.out.println("The Payload " + payload);
             JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
             String deviceId = String.valueOf(jsonObject.get("_id")).replace("\"", "");
@@ -103,9 +102,11 @@ public class MyClient {
                 System.out.println("i am in handle lamp call");
                 handleLamp(deviceId, status);
 
-            } else if (deviceType.equals("fan")) {
+            }else if (deviceType.equals("lamp")&& deviceId.equals("Inter lamp")) {
+                System.out.println("i am indoor");
+                handleIndoor(deviceId,status);
+            }else if (deviceType.equals("fan")) {
 
-            } else if (deviceType.equals("curtain")) {
 
             } else if (deviceType.equals("alarm")) {
                 handleAlarm(deviceId, status);
@@ -118,7 +119,7 @@ public class MyClient {
 
     public void handleLamp(String deviceId, String status) throws InterruptedException, JSONException {
         System.out.println("i am in hanldelapm method");
-        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("kuk")) {
+        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("donkey")) {
             arduinoService.ledOn();
             System.out.println("i am in true in method handlelamp");
             System.out.println("lamp is on");
@@ -130,7 +131,7 @@ public class MyClient {
             String message = json.toString();
             sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
             System.out.println(message);
-        } else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("fitta")) {
+        } else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("kone")) {
             System.out.println("i am in false in handlelamp");
             arduinoService.ledOff();
             String lampId = deviceId;
@@ -142,11 +143,27 @@ public class MyClient {
             sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
             System.out.println("lamp is off" + message);
 
-        } else if (deviceId.equals("inter lamp") && status.equalsIgnoreCase("true")) {
-
-        } else if (deviceId.equals("inter lamp") && status.equalsIgnoreCase("false")) {
 
         }
+    }
+    public void handleIndoor(String deviceId,String status) throws InterruptedException, JSONException {
+        if (deviceId.equalsIgnoreCase("Inter lamp") && status.equalsIgnoreCase("jebiga")){
+            System.out.println("i am in true in method handleIndoor");
+            arduinoService.ledInsideOn();
+            System.out.println("lampin is on");
+            String lampIds = deviceId;
+            String newStatus = "true";
+            JSONObject json = new JSONObject();
+            json.put("_id", lampIds);
+            json.put("status", newStatus);
+            String message = json.toString();
+            sendMessage("confirmation={'_id':'Inter lamp','device':'lamp','status':'true','result':'success'}");
+            System.out.println(message);
+        }else if (deviceId.equals("Inter lamp") && status.equalsIgnoreCase("mater")){
+            arduinoService.ledInsideOff();
+
+        }
+
     }
 
 

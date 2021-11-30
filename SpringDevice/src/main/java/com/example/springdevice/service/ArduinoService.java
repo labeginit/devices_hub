@@ -51,9 +51,8 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
     }
 
     @Override
-    public void ledInsideOn() throws InterruptedException {
+    public void ledInsideOn() {
         AdruinoCon.openConnection(); //open connection
-
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsInside[commandIndex]); // pick a command from an array and send it to USB
