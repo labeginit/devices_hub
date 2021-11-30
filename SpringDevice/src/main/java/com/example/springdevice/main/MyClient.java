@@ -11,10 +11,10 @@ import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
+import java.net.http.HttpClient;
 
 
 @ClientEndpoint
@@ -23,9 +23,7 @@ public class MyClient {
     Session userSession = null;
     private MessageHandler messageHandler;
     private ArduinoConnect arduinoService = new ArduinoService();
-
-
-    public MyClient(URI endpointURI) {
+    public MyClient(URI endpointURI) throws InterruptedException {
         try {
 
             WebSocketContainer container = ContainerProvider
@@ -74,7 +72,7 @@ public class MyClient {
         void handleMessage(String message);
     }
 
-    public void readMessage(String message) throws JSONException, InterruptedException {
+    public void readMessage(String message) throws JSONException, InterruptedException, IOException {
         //The smart house look like exactly the same for smartHouse class in the server side
 
         // Incoming message will be two parts as you can see first one is the operation and here it will be ("changeDeviceStatus") always, and the payLoad is the JSOn one
@@ -94,6 +92,7 @@ public class MyClient {
 
             Lamp lamp = gson.fromJson(payload, Lamp.class);
             System.out.println("LAMMMMMMMMMMMP" + lamp);
+            System.out.println("The Payload " + payload);
             JsonObject jsonObject = new JsonParser().parse(payload).getAsJsonObject();
             String deviceId = String.valueOf(jsonObject.get("_id")).replace("\"", "");
             String deviceType = String.valueOf(jsonObject.get("deviceType")).replace("\"", "");
@@ -108,29 +107,30 @@ public class MyClient {
 
             } else if (deviceType.equals("curtain")) {
 
+            } else if (deviceType.equals("alarm")) {
+                handleAlarm(deviceId, status);
             } else if (deviceType.equals("thermometer")) {
+                handleTemp(status);
 
             }
         }
     }
 
-
     public void handleLamp(String deviceId, String status) throws InterruptedException, JSONException {
         System.out.println("i am in hanldelapm method");
-        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("true")) {
+        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("kuk")) {
             arduinoService.ledOn();
             System.out.println("i am in true in method handlelamp");
             System.out.println("lamp is on");
             String lampId = deviceId;
             String newStatus = "true";
-            deviceId = lampId;
             JSONObject json = new JSONObject();
-            json.put("_id", deviceId);
+            json.put("_id", lampId);
             json.put("status", newStatus);
             String message = json.toString();
             sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
             System.out.println(message);
-        }else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("fitta")){
+        } else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("fitta")) {
             System.out.println("i am in false in handlelamp");
             arduinoService.ledOff();
             String lampId = deviceId;
@@ -149,5 +149,19 @@ public class MyClient {
         }
     }
 
-}
 
+    public void handleAlarm(String deviceId, String status) throws InterruptedException, JSONException, IOException {
+        if (status.equalsIgnoreCase("true")) {
+            arduinoService.alarmOn();
+
+        } else if (status.equalsIgnoreCase("false")) {
+            arduinoService.alarmOff();
+
+        }
+    }
+    public void handleTemp(String status) throws InterruptedException {
+        if (status.equalsIgnoreCase("temperature")) {
+            arduinoService.recivietemp();
+        }
+    }
+}

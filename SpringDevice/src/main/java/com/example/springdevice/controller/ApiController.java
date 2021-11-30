@@ -16,7 +16,7 @@ import java.io.IOException;
 @RestController
 public class ApiController {
 private Client client;
-
+/*
     //<=======================================================================>
     private ArduinoConnect arduinoService;
 
@@ -85,8 +85,9 @@ return "something went wrong";
 //        byte[] bytes = multipartFile.getBytes();
 //        System.out.println("File uploaded content:\n" + new String(bytes));
 //        return "file uploaded";
-//    }
-    //}
+//
+
+
 
 
 
