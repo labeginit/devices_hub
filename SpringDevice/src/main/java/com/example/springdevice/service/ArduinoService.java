@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.Enumeration;
 
 
+
 @Service
 public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
     private byte[] readBuffer = new byte[400];
@@ -32,9 +33,15 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
     String[] commands = {"off", "on"}; // commands that adruino can recognize
     String[] commandsInside = {"insideOff", "insideOn"};
     String[] commandsAlarm = {"alarmOn","alarmOff"};
+    String[] commandsTemp = {"temperature"};
+    String[] commandsFan = {"fan"};
+
+    public void smartHouse(){
+        AdruinoCon.openConnection();
+    }
     @Override
     public void ledOn(){
-        AdruinoCon.openConnection(); //open connection
+       // AdruinoCon.openConnection(); //open connection
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB
@@ -44,7 +51,7 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
 
     @Override
     public void ledOff() {
-        AdruinoCon.openConnection();
+        //AdruinoCon.openConnection();
         this.isOn = false; // if the current state is TRUE we set it to FALSE
         int commandIndex =  0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB
@@ -52,7 +59,7 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
 
     @Override
     public void ledInsideOn() {
-        AdruinoCon.openConnection(); //open connection
+        //AdruinoCon.openConnection(); //open connection
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsInside[commandIndex]); // pick a command from an array and send it to USB
@@ -60,7 +67,7 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
 
     @Override
     public void ledInsideOff() throws InterruptedException {
-        AdruinoCon.openConnection();
+       // AdruinoCon.openConnection();
         this.isOn = false; // if the current state is TRUE we set it to FALSE
         int commandIndex =  0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsInside[commandIndex]); // pick a command from an array and send it to USB
@@ -107,18 +114,25 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
 
     @Override
     public void alarmOn() throws InterruptedException {
-        AdruinoCon.openConnection(); //open connection
+        //AdruinoCon.openConnection(); //open connection
         this.isOn = true; // if the current state is TRUE we set it to FALSE
-        int commandIndex = 1; // false = 0; true = 1
+        int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsAlarm[commandIndex]); // pick a command from an array and send it to USB
     }
 
     @Override
     public void alarmOff() throws InterruptedException {
-        AdruinoCon.openConnection(); //open connection
+        //AdruinoCon.openConnection(); //open connection
         this.isOn = false; // if the current state is TRUE we set it to FALSE
-        int commandIndex = 0; // false = 0; true = 1
+        int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsAlarm[commandIndex]); // pick a command from an array and send it to USB
+    }
+
+    @Override
+    public void fan() throws InterruptedException {
+        this.isOn = true; // if the current state is TRUE we set it to FALSE
+        int commandIndex = 1; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFan[commandIndex]); // pick a command from an array and send it to USB
     }
 
 

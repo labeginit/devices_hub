@@ -14,4 +14,6 @@ public interface ArduinoConnect {
     void alarmOn() throws InterruptedException;
 
     void alarmOff() throws InterruptedException;
+
+    void fan() throws InterruptedException;
 }
