@@ -90,7 +90,7 @@ public class MyClient {
         String payload = parts[1];
         System.out.println("The Payload " + payload);
 
-        if (operation.equals("changeDeviceStatus")) {
+        if (operation.equals("changeDeviceStatus2Device")) {
 
             System.out.println("first sout");
             Gson gson = new Gson();
