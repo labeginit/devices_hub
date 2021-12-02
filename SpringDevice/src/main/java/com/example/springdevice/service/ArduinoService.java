@@ -2,6 +2,7 @@ package com.example.springdevice.service;
 
 import arduino.Arduino;
 import com.example.springdevice.SpringDeviceApplication;
+import com.example.springdevice.main.MyClient;
 import org.springframework.stereotype.Service;
 
 import javax.comm.CommPortIdentifier;
@@ -15,6 +16,7 @@ import java.util.Enumeration;
 
 @Service
 public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
+    MyClient myClient;
     private byte[] readBuffer = new byte[400];
     private InputStream input;
     private String temperatureBuffer;
@@ -154,6 +156,6 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
             } catch (Exception e) {
                 System.err.println(e.toString());
             }
-        }
+        }myClient.sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':" + temperatureBuffer + "}");
     }
 }

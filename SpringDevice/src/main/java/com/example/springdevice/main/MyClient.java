@@ -183,8 +183,8 @@ public class MyClient {
 
     public void handleTemp(String status) throws InterruptedException {
         if (status.equalsIgnoreCase("temperature")) {
-            // arduinoService.recivietemp();
-            sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
+             arduinoService.recivietemp();
+           // sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
             // skickar
         }
     }
@@ -200,7 +200,7 @@ public class MyClient {
             json.put("_id", lampIds);
             json.put("status", newStatus);
             String message = json.toString();
-            sendMessage("confirmation={'_id':'Inter lamp','device':'lamp','status':'true','result':'success'}");
+            sendMessage("confirmation={'_id':'Indoor lamp','device':'lamp','status':'true','result':'success'}");
             System.out.println(message);
         } else if (deviceId.equals("Indoor lamp") && status.equalsIgnoreCase("off")) {
             arduinoService.ledInsideOff();
@@ -211,7 +211,7 @@ public class MyClient {
             json.put("_id", lampIds);
             json.put("status", newStatus);
             String message = json.toString();
-            sendMessage("confirmation={'_id':'Inter lamp','device':'lamp','status':'false','result':'success'}");
+            sendMessage("confirmation={'_id':'Indoor lamp','device':'lamp','status':'false','result':'success'}");
             System.out.println(message);
 
         }
