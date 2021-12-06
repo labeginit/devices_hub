@@ -35,8 +35,11 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
     String[] commands = {"off", "on"}; // commands that adruino can recognize
     String[] commandsInside = {"insideOff", "insideOn"};
     String[] commandsAlarm = {"alarmOn","alarmOff"};
-    String[] commandsTemp = {"temperature"};
-    String[] commandsFan = {"fan"};
+    String[] commandsTemp = {"temperature"};// ta bort om temp funkar
+    String[] commandsFanHigh = {"High"};
+    String[] commandsFanMedium = {"Medium"};
+    String[] commandsFanLow = {"Low"};
+    String[] commandsFanOff = {"Off"};
 
     public void smartHouse(){
         AdruinoCon.openConnection();
@@ -49,7 +52,6 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB
 
     }
-
 
     @Override
     public void ledOff() {
@@ -133,8 +135,28 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
     @Override
     public void fan() throws InterruptedException {
         this.isOn = true; // if the current state is TRUE we set it to FALSE
-        int commandIndex = 1; // false = 0; true = 1
-        AdruinoCon.serialWrite(this.commandsFan[commandIndex]); // pick a command from an array and send it to USB
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanHigh[commandIndex]); // pick a command from an array and send it to USB
+    }
+
+    public void fanMedium()throws InterruptedException{
+        this.isOn = true; // if the current state is TRUE we set it to FALSE
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanMedium[commandIndex]); // pick a command from an array and send it to USB
+    }
+
+    @Override
+    public void fanLow() throws InterruptedException {
+        this.isOn = true; // if the current state is TRUE we set it to FALSE
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanLow[commandIndex]); // pick a command from an array and send it to USB
+    }
+
+    @Override
+    public void fanOff() throws InterruptedException {
+        this.isOn = true; // if the current state is TRUE we set it to FALSE
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanOff[commandIndex]); // pick a command from an array and send it to USB
     }
 
 
@@ -156,6 +178,8 @@ public class ArduinoService implements ArduinoConnect, SerialPortEventListener {
             } catch (Exception e) {
                 System.err.println(e.toString());
             }
-        }myClient.sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':" + temperatureBuffer + "}");
+        }myClient.sendMessage("temperature={'_id':'Livingroom Thermometer',device:'thermometer','status':" + temperatureBuffer + "}");
+        System.out.println("DIN MAMMAS FITTA FUNKAR DU??????");
+        System.out.println(temperatureBuffer);
     }
 }

@@ -2,6 +2,8 @@ package com.example.springdevice.main;
 
 
 import arduino.Arduino;
+import com.example.springdevice.DeviceType.Alarm;
+import com.example.springdevice.DeviceType.Fan;
 import com.example.springdevice.DeviceType.Lamp;
 import com.example.springdevice.DeviceType.SmartHouse;
 import com.example.springdevice.service.ArduinoConnect;
@@ -15,7 +17,7 @@ import org.json.JSONObject;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
+import java.util.ArrayList;
 
 
 @ClientEndpoint
@@ -77,6 +79,7 @@ public class MyClient {
         void handleMessage(String message);
     }
 
+
     public void readMessage(String message) throws JSONException, InterruptedException, IOException {
         //The smart house look like exactly the same for smartHouse class in the server side
 
@@ -90,7 +93,11 @@ public class MyClient {
         String payload = parts[1];
         System.out.println("The Payload " + payload);
 
-        if (operation.equals("changeDeviceStatus2Device")) {
+
+        if (operation.equals("getDevices")) {
+            readGetAll(payload);
+
+        } else if (operation.equals("changeDeviceStatus2Device")) {
 
             System.out.println("first sout");
             Gson gson = new Gson();
@@ -111,23 +118,24 @@ public class MyClient {
             } else if (deviceId.equals("Indoor lamp")) {
                 System.out.println("i am indoor");
                 handleIndoor(deviceId, status);
-            } else if (deviceType.equals("fan")) {
-                handleFan(deviceId,status);
+            } else if (deviceId.equals("Bedroom Fan")) {
+                handleFan(deviceId, status);
 
             } else if (deviceId.equals("alarm")) {
+                System.out.println("i am calling alarm handle alarm method");
                 handleAlarm(deviceId, status);
             } else if (deviceType.equals("thermometer")) {
+                //om allt funkar borde denna raderas med metoden osså eftersom allt sker i arduino service
                 handleTemp(status);
-
             }
         }
     }
 
     public void handleLamp(String deviceId, String status) throws InterruptedException, JSONException {
-        System.out.println("i am in hanldelapm method");
-        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("on")) {
+        System.out.println("i am in handleLamp method");
+        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("true")) {
             arduinoService.ledOn();
-            System.out.println("i am in true in method handlelamp");
+            System.out.println("i am in true in method handleLamp");
             System.out.println("lamp is on");
             String lampId = deviceId;
             String newStatus = "true";
@@ -137,8 +145,8 @@ public class MyClient {
             String message = json.toString();
             sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
             System.out.println(message);
-        } else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("off")) {
-            System.out.println("i am in false in handlelamp");
+        } else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("false")) {
+            System.out.println("i am in false in handleLamp");
             arduinoService.ledOff();
             String lampId = deviceId;
             String fakeState = "false";
@@ -154,8 +162,8 @@ public class MyClient {
     }
 
     public void handleAlarm(String deviceId, String status) throws InterruptedException, JSONException, IOException {
-        if (deviceId.equalsIgnoreCase("alarm") && status.equalsIgnoreCase("true")) {
-            System.out.println("i am in true in method handlealarm");
+        if (deviceId.equalsIgnoreCase("alarm") && status.equalsIgnoreCase("1")) {
+            System.out.println("i am in true in method handleAlarm");
             arduinoService.alarmOn();
             System.out.println("alarm is on");
             String alarmId = deviceId;
@@ -164,9 +172,9 @@ public class MyClient {
             json.put("_id", alarmId);
             json.put("status", newStatus);
             String message = json.toString();
-            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'true','result':'success'}");
+            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'1','result':'success'}");
             System.out.println(message);
-        } else if (deviceId.equals("alarm") && status.equalsIgnoreCase("false")) {
+        } else if (deviceId.equals("alarm") && status.equalsIgnoreCase("0")) {
             arduinoService.alarmOff();
             System.out.println("alarm is off");
             String alarmId = deviceId;
@@ -175,7 +183,7 @@ public class MyClient {
             json.put("_id", alarmId);
             json.put("status", newStatus);
             String message = json.toString();
-            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'false','result':'success'}");
+            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'0','result':'success'}");
             System.out.println(message);
 
         }
@@ -183,17 +191,17 @@ public class MyClient {
 
     public void handleTemp(String status) throws InterruptedException {
         if (status.equalsIgnoreCase("temperature")) {
-             arduinoService.recivietemp();
-           // sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
+            arduinoService.recivietemp();
+            // sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
             // skickar
         }
     }
 
     public void handleIndoor(String deviceId, String status) throws InterruptedException, JSONException {
-        if (deviceId.equalsIgnoreCase("Indoor lamp") && status.equalsIgnoreCase("on")) {
+        if (deviceId.equalsIgnoreCase("Indoor lamp") && status.equalsIgnoreCase("true")) {
             System.out.println("i am in true in method handleIndoor");
             arduinoService.ledInsideOn();
-            System.out.println("lampin is on");
+            System.out.println("lamp Indoor is on");
             String lampIds = deviceId;
             String newStatus = "true";
             JSONObject json = new JSONObject();
@@ -202,9 +210,9 @@ public class MyClient {
             String message = json.toString();
             sendMessage("confirmation={'_id':'Indoor lamp','device':'lamp','status':'true','result':'success'}");
             System.out.println(message);
-        } else if (deviceId.equals("Indoor lamp") && status.equalsIgnoreCase("off")) {
+        } else if (deviceId.equals("Indoor lamp") && status.equalsIgnoreCase("false")) {
             arduinoService.ledInsideOff();
-            System.out.println("lampin is off");
+            System.out.println("lamp Indoor is off");
             String lampIds = deviceId;
             String newStatus = "false";
             JSONObject json = new JSONObject();
@@ -219,10 +227,22 @@ public class MyClient {
     }
 
     public void handleFan(String deviceId, String status) throws InterruptedException, JSONException {
-        if (deviceId.equalsIgnoreCase("Bedroom Fan") && status.equalsIgnoreCase("2")) {
-            System.out.println("i am in true in method handlefan");
+        if (deviceId.equalsIgnoreCase("Bedroom Fan") && status.equalsIgnoreCase("3")) {
+            System.out.println("i am in true in method handle fan");
             arduinoService.fan();
-            System.out.println("fan is on");
+            System.out.println("fan is high");
+            String fanId = deviceId;
+            String newStatus = "true";
+            JSONObject json = new JSONObject();
+            json.put("_id", fanId);
+            json.put("status", newStatus);
+            String message = json.toString();
+            sendMessage("confirmation={'_id':'Bedroom Fan','device':'fan','status':'3','result':'success'}");
+            System.out.println(message);
+        } else if (deviceId.equalsIgnoreCase("Bedroom Fan") && status.equalsIgnoreCase("2")) {
+            System.out.println("i am in medium in method handle fan");
+            arduinoService.fanMedium();
+            System.out.println("fan is medium");
             String fanId = deviceId;
             String newStatus = "true";
             JSONObject json = new JSONObject();
@@ -231,7 +251,151 @@ public class MyClient {
             String message = json.toString();
             sendMessage("confirmation={'_id':'Bedroom Fan','device':'fan','status':'2','result':'success'}");
             System.out.println(message);
+        } else if (deviceId.equalsIgnoreCase("Bedroom Fan") && status.equalsIgnoreCase("1")) {
+            System.out.println("i am in low in method handle fan");
+            arduinoService.fanLow();
+            System.out.println("fan is low");
+            String fanId = deviceId;
+            String newStatus = "true";
+            JSONObject json = new JSONObject();
+            json.put("_id", fanId);
+            json.put("status", newStatus);
+            String message = json.toString();
+            sendMessage("confirmation={'_id':'Bedroom Fan','device':'fan','status':'1','result':'success'}");
+            System.out.println(message);
+        } else if (deviceId.equalsIgnoreCase("Bedroom Fan") && status.equalsIgnoreCase("0")) {
+            System.out.println("i am in off in method handle fan");
+            arduinoService.fanOff();
+            System.out.println("fan is off");
+            String fanId = deviceId;
+            String newStatus = "true";
+            JSONObject json = new JSONObject();
+            json.put("_id", fanId);
+            json.put("status", newStatus);
+            String message = json.toString();
+            sendMessage("confirmation={'_id':'Bedroom Fan','device':'fan','status':'0','result':'success'}");
+            System.out.println(message);
         }
+    }
+
+
+    /*
+    public void parseJson(JsonObject jsonObject) throws JSONException, InterruptedException {
+        JSONObject obj = new JSONObject(String.valueOf(jsonObject));
+        SmartHouse smartHouse = new SmartHouse();
+
+
+        List<String> list = new ArrayList<String>();
+        JSONArray array = obj.getJSONArray("lampList");
+        for (int i = 0; i < array.length(); i++) {
+            list.add(array.getJSONObject(i).getString("_id"));
+            System.out.println(list);
+
+            for (int j = 0; j <list.size() ; j++) {
+
+                JsonObject jsonObject = new JsonParser().parse(list).getAsJsonObject();
+                String deviceId = String.valueOf(jsonObject.get("_id")).replace("\"", "");
+                String deviceType = String.valueOf(jsonObject.get("deviceType")).replace("\"", "");
+                String status = String.valueOf(jsonObject.get("option")).replace("\"", "");
+
+                if (deviceId.equalsIgnoreCase("Indoor lamp") && status.equalsIgnoreCase("true")) {
+                    System.out.println("i am in true in method handleIndoor");
+                    arduinoService.ledInsideOn();
+                    System.out.println("lamp Indoor is on");
+                    String lampIds = deviceId;
+                    String newStatus = "true";
+                    JSONObject json = new JSONObject();
+                    json.put("_id", lampIds);
+                    json.put("status", newStatus);
+                    String message = json.toString();
+                    sendMessage("confirmation={'_id':'Indoor lamp','device':'lamp','status':'true','result':'success'}");
+                    System.out.println(message);
+                } else if (deviceId.equals("Indoor lamp") && status.equalsIgnoreCase("false")) {
+                    arduinoService.ledInsideOff();
+                    System.out.println("lamp Indoor is off");
+                    String lampIds = deviceId;
+                    String newStatus = "false";
+                    JSONObject json = new JSONObject();
+                    json.put("_id", lampIds);
+                    json.put("status", newStatus);
+                    String message = json.toString();
+                    sendMessage("confirmation={'_id':'Indoor lamp','device':'lamp','status':'false','result':'success'}");
+                    System.out.println(message);
+            }
+           } }
+
+
+     */
+
+    public void readGetAll(String payLoad) throws JSONException, InterruptedException, IOException {
+        Gson gson = new Gson();
+        SmartHouse smartHouse = SmartHouse.getInstance();
+        smartHouse.clear();
+
+        System.out.println("New payload " + payLoad);
+
+        smartHouse = gson.fromJson(payLoad, SmartHouse.class);
+
+        System.out.println("New payloa2 "+ smartHouse);
+
+        System.out.println("Lamp List " + smartHouse.getLampList());
+
+        System.out.println("Fan List " + smartHouse.getFanList());
+
+        System.out.println("Alarm List " + smartHouse.getAlarmList());
+
+
+
+
+        ArrayList fanList = smartHouse.getFanList();
+
+        ArrayList lampList = smartHouse.getLampList();
+
+        ArrayList alarmList = smartHouse.getAlarmList();
+
+
+
+        System.out.println("Here are all FANS" + fanList);
+        for (int i = 0; i <fanList.size(); i++) {
+            Fan fan = (Fan) fanList.get(i);
+            System.out.println("Here is the faaaaaaan" + fan);
+
+            String fanId= fan.get_id();
+            System.out.println("fan id "+fanId);
+
+            int fanStatus = fan.getStatus();
+            System.out.println("fan Speed" +fanStatus);
+
+            handleFan(fanId,String.valueOf(fanStatus));
+
+        }
+
+        for (int i = 0; i < lampList.size(); i++) {
+
+            Lamp lamp1 = (Lamp) lampList.get(i);
+
+            String lampId= lamp1.get_id();
+
+            boolean lamp1Status = lamp1.isStatus();
+
+            handleLamp(lampId, String.valueOf(lamp1Status));
+
+        }
+
+        for (int i = 0; i <alarmList.size(); i++) {
+            Alarm alarm = (Alarm) alarmList.get(i);
+            System.out.println("Here is the alarm" + alarm);
+
+            String alarId= alarm.get_id();
+            System.out.println("Alaram id "+alarId);
+
+            int alaramStaus = alarm.getStatus();
+            System.out.println("Alarm Speed" +alaramStaus);
+
+            handleAlarm(alarId,String.valueOf(alaramStaus));
+
+        }
+
     }
 }
 

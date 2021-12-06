@@ -8,6 +8,7 @@ package com.example.springdevice.DeviceType;
                 this.status = status;
             }
 
+
             public String get_id() {
                 return _id;
             }

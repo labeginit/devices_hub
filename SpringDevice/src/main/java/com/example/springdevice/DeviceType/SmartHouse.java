@@ -21,7 +21,7 @@ public class SmartHouse {
     }
 
 
-    private SmartHouse() {
+    public SmartHouse() {
         lampList = new ArrayList<>();
         fanList = new ArrayList<>();
         curtainList = new ArrayList<>();
