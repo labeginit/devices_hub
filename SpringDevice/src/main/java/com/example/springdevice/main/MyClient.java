@@ -2,7 +2,6 @@ package com.example.springdevice.main;
 
 
 import arduino.Arduino;
-import com.example.springdevice.DeviceType.Lamp;
 import com.example.springdevice.DeviceType.SmartHouse;
 import com.example.springdevice.service.ArduinoConnect;
 import com.example.springdevice.service.ArduinoService;
@@ -15,7 +14,6 @@ import org.json.JSONObject;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 
 
 @ClientEndpoint
@@ -46,8 +44,10 @@ public class MyClient {
     @OnOpen
     public void onOpen(Session userSession) throws InterruptedException {
         this.userSession = userSession;
-        ArduinoService arduinoService = new ArduinoService();
-        arduinoService.smartHouse();
+        /*ArduinoService arduinoService = new ArduinoService();
+        arduinoService.smartHouse();*/
+
+        arduinoService.recivietemp();
 
     }
 
@@ -112,12 +112,12 @@ public class MyClient {
                 System.out.println("i am indoor");
                 handleIndoor(deviceId, status);
             } else if (deviceType.equals("fan")) {
-                handleFan(deviceId,status);
+                handleFan(deviceId, status);
 
             } else if (deviceId.equals("alarm")) {
                 handleAlarm(deviceId, status);
             } else if (deviceType.equals("thermometer")) {
-                handleTemp(status);
+                handleTemp(deviceId);
 
             }
         }
@@ -164,7 +164,7 @@ public class MyClient {
             json.put("_id", alarmId);
             json.put("status", newStatus);
             String message = json.toString();
-            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'true','result':'success'}");
+            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'0','result':'success'}");
             System.out.println(message);
         } else if (deviceId.equals("alarm") && status.equalsIgnoreCase("false")) {
             arduinoService.alarmOff();
@@ -175,16 +175,16 @@ public class MyClient {
             json.put("_id", alarmId);
             json.put("status", newStatus);
             String message = json.toString();
-            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'false','result':'success'}");
+            sendMessage("confirmation={'_id':'alarm','device':'alarm','status':'1','result':'success'}");
             System.out.println(message);
 
         }
     }
 
-    public void handleTemp(String status) throws InterruptedException {
-        if (status.equalsIgnoreCase("temperature")) {
-             arduinoService.recivietemp();
-           // sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
+    public void handleTemp(String deviceId) throws InterruptedException {
+        if (deviceId.equalsIgnoreCase("thermometer")) {
+            arduinoService.recivietemp();
+            // sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
             // skickar
         }
     }
