@@ -42,6 +42,10 @@ public class ArduinoService implements ArduinoConnect {
     String[] commandsAlarm = {"alarmOn", "alarmOff"};
     String[] commandsTemp = {"temperature"};
     String[] commandsFan = {"fan"};
+    String[] commandsFanHigh = {"High"};
+    String[] commandsFanMedium = {"Medium"};
+    String[] commandsFanLow = {"Low"};
+    String[] commandsFanOff = {"Off"};
 
     public void smartHouse() {
         AdruinoCon.openConnection();
@@ -130,8 +134,29 @@ public class ArduinoService implements ArduinoConnect {
     @Override
     public void fan() throws InterruptedException {
         this.isOn = true; // if the current state is TRUE we set it to FALSE
-        int commandIndex = 1; // false = 0; true = 1
-        AdruinoCon.serialWrite(this.commandsFan[commandIndex]); // pick a command from an array and send it to USB
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanHigh[commandIndex]); // pick a command from an array and send it to USB
+    }
+
+    @Override
+    public void fanMedium() throws InterruptedException {
+        this.isOn = true; // if the current state is TRUE we set it to FALSE
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanMedium[commandIndex]); // pick a command from an array and send it to USB
+    }
+
+    @Override
+    public void fanOff() throws InterruptedException {
+        this.isOn = true; // if the current state is TRUE we set it to FALSE
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanOff[commandIndex]); // pick a command from an array and send it to USB
+    }
+
+    @Override
+    public void fanLow() throws InterruptedException {
+        this.isOn = true; // if the current state is TRUE we set it to FALSE
+        int commandIndex = 0; // false = 0; true = 1
+        AdruinoCon.serialWrite(this.commandsFanLow[commandIndex]); // pick a command from an array and send it to USB
     }
 
 
