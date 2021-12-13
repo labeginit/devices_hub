@@ -1,27 +1,37 @@
 package com.example.springdevice.DeviceType;
 
 public class Fan {
-    private String deviceID;
-    private int speed;
+    private String _id;
+    private int status;
+
 
     public Fan(String deviceID, int speed) {
-        this.deviceID = deviceID;
-        this.speed = speed;
+        this._id = deviceID;
+        this.status = speed;
     }
 
-    public String getdeviceID() {
-        return deviceID;
+    public String get_id() {
+        return _id;
     }
 
-    public int getSpeed() {
-        return speed;
+    public int getStatus() {
+        return status;
     }
 
-    public void setdeviceID(String deviceID) {
-        this.deviceID = deviceID;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Fan{" +
+                "_id='" + _id + '\'' +
+                ", status=" + status +
+                '}';
     }
 }
