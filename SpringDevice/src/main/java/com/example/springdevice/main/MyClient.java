@@ -44,8 +44,8 @@ public class MyClient {
     @OnOpen
     public void onOpen(Session userSession) throws InterruptedException {
         this.userSession = userSession;
-        /*ArduinoService arduinoService = new ArduinoService();
-        arduinoService.smartHouse();*/
+//        ArduinoService arduinoService = new ArduinoService();
+//        arduinoService.smartHouse();
 
         arduinoService.recivietemp();
 
@@ -125,7 +125,7 @@ public class MyClient {
 
     public void handleLamp(String deviceId, String status) throws InterruptedException, JSONException {
         System.out.println("i am in hanldelapm method");
-        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("on")) {
+        if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("true")) {
             arduinoService.ledOn();
             System.out.println("i am in true in method handlelamp");
             System.out.println("lamp is on");
@@ -137,7 +137,7 @@ public class MyClient {
             String message = json.toString();
             sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
             System.out.println(message);
-        } else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("off")) {
+        } else if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("false")) {
             System.out.println("i am in false in handlelamp");
             arduinoService.ledOff();
             String lampId = deviceId;

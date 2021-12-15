@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.fazecast.jSerialComm.*;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
+
+import javax.websocket.Session;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -34,6 +36,7 @@ public class ArduinoService implements ArduinoConnect {
 
     private static final String[] PORT_NAMES = {"COM3"};//ändra här om COM strular och säger tex COM3 istället för COM4
     private static final Arduino AdruinoCon = new Arduino("COM3", 9600);
+    Session userSession = null;
 
 
     private boolean isOn; // state of the led
@@ -49,6 +52,9 @@ public class ArduinoService implements ArduinoConnect {
 
     public void smartHouse() {
         AdruinoCon.openConnection();
+    }
+    public void sendMessage(String message) {
+        this.userSession.getAsyncRemote().sendText(message);
     }
 
     @Override
@@ -161,18 +167,24 @@ public class ArduinoService implements ArduinoConnect {
 
 
     protected void receive(String line) {
-
         System.out.println(line);
         System.out.println(line);
+        sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
+        System.out.println("i have sent outdoor");
         if (readline.startsWith("thermometer")) {
             String[] words = readline.split(" ");
             String str = words[1].replaceAll("[^\\.0123456789]", ""); // remove all non-digits
             double temp = Double.parseDouble(str);
+            myClient.sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
+            System.out.println("in sending");
+            myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + line + "'}");
+            myClient.sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
             if (temp > 15) {
                 String formattedTemp = String.format(Locale.getDefault(), "%.1f", temp);
                 myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + formattedTemp + "'}");
 
                 System.out.println(formattedTemp);
+                System.out.println("i am in formated temp");
 
             }
 
