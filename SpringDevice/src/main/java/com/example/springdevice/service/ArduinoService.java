@@ -170,7 +170,8 @@ public class ArduinoService implements ArduinoConnect {
             double temp = Double.parseDouble(str);
             if (temp > 15) {
                 String formattedTemp = String.format(Locale.getDefault(), "%.1f", temp);
-                myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + formattedTemp + "'}'");
+                myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + formattedTemp + "'}");
+
                 System.out.println(formattedTemp);
 
             }
