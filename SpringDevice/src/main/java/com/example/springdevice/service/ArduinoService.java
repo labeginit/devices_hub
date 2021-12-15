@@ -164,7 +164,7 @@ public class ArduinoService implements ArduinoConnect {
 
         System.out.println(line);
         System.out.println(line);
-        if (!readline.startsWith("thermometer")) {
+        if (readline.startsWith("thermometer")) {
             String[] words = readline.split(" ");
             String str = words[1].replaceAll("[^\\.0123456789]", ""); // remove all non-digits
             double temp = Double.parseDouble(str);

@@ -10,7 +10,7 @@ public class ClientStart {
 
     public static void main(String[] args) throws InterruptedException, URISyntaxException, JSONException {
 
-        final MyClient clientEndPoint = new MyClient(new URI("ws://194.47.44.10:1337/websocket"));
+        final MyClient clientEndPoint = new MyClient(new URI("ws://ro01.beginit.se:1337/websocket"));
         //ro01.beginit.se:1337
         //194.47.44.10:1337
 
