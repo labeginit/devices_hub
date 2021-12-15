@@ -15,6 +15,9 @@ import java.util.Enumeration;
 import java.util.Locale;
 
 
+/**
+ *
+ */
 @Service
 public class ArduinoService implements ArduinoConnect {
     MyClient myClient;
@@ -52,7 +55,9 @@ public class ArduinoService implements ArduinoConnect {
 
     public void smartHouse() {
         AdruinoCon.openConnection();
+        temp();
     }
+
     public void sendMessage(String message) {
         this.userSession.getAsyncRemote().sendText(message);
     }
@@ -64,6 +69,12 @@ public class ArduinoService implements ArduinoConnect {
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB
 
+    }
+    @Override
+    public void temp(){
+        String fuckit = AdruinoCon.serialRead(10);
+        System.out.println(fuckit);
+        myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + fuckit + "'}");
     }
 
 

@@ -1,5 +1,5 @@
 package com.example.springdevice.main;
-import arduino.Arduino;
+
 import org.json.JSONException;
 
 import java.net.URI;

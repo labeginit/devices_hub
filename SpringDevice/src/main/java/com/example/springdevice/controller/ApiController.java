@@ -1,17 +1,5 @@
 package com.example.springdevice.controller;
 
-import com.example.springdevice.service.ArduinoConnect;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 /*
 @RestController
 public class ApiController {

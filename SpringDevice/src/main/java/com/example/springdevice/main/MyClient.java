@@ -3,17 +3,16 @@ package com.example.springdevice.main;
 
 import arduino.Arduino;
 import com.example.springdevice.DeviceType.SmartHouse;
-import com.example.springdevice.service.ArduinoConnect;
 import com.example.springdevice.service.ArduinoService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.net.URI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.websocket.*;
-import java.io.IOException;
-import java.net.URI;
 
 
 @ClientEndpoint
@@ -22,7 +21,7 @@ public class MyClient {
     SmartHouse smartHouse;
     Session userSession = null;
     private MessageHandler messageHandler;
-    private ArduinoConnect arduinoService = new ArduinoService();
+    private ArduinoService arduinoService = new ArduinoService();
 
     public MyClient(URI endpointURI) throws InterruptedException {
         try {
@@ -44,10 +43,10 @@ public class MyClient {
     @OnOpen
     public void onOpen(Session userSession) throws InterruptedException {
         this.userSession = userSession;
-//        ArduinoService arduinoService = new ArduinoService();
-//        arduinoService.smartHouse();
+        ArduinoService arduinoService = new ArduinoService();
+        arduinoService.smartHouse();
 
-        arduinoService.recivietemp();
+
 
     }
 

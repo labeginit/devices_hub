@@ -1,7 +1,9 @@
 package com.example.springdevice.service;
 
-public interface ArduinoConnect {
+interface ArduinoConnect {
     void ledOn() throws InterruptedException;
+
+    void temp();
 
     void ledOff() throws InterruptedException;
 
