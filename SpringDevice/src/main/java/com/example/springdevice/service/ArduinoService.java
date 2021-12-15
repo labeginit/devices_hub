@@ -54,7 +54,7 @@ public class ArduinoService implements ArduinoConnect {
     String[] commandsFanLow = {"Low"};
     String[] commandsFanOff = {"Off"};
 
-    public ArduinoService() throws InterruptedException {
+    public ArduinoService(){
     }
 
     public void smartHouse() {
@@ -64,6 +64,7 @@ public class ArduinoService implements ArduinoConnect {
     }
     @Override
     public void temp(){
+        //Vi ska testa denna
         //AdruinoCon.serialWrite(String.valueOf(this.commandsTemp));
         String duckit  = AdruinoCon.serialRead();
         //String fuckit = AdruinoCon.serialRead(10); denna funkar för få det till java. Ska testa de ovanför om de funkar
@@ -101,102 +102,46 @@ public class ArduinoService implements ArduinoConnect {
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsInside[commandIndex]); // pick a command from an array and send it to USB
     }
-
-
-/*    public void recivietemp() {
-        SerialPort port = SerialPort.getCommPort(portName);
-        port.openPort();
-        port.addDataListener(new SerialPortDataListener() {
-            @Override
-            public int getListeningEvents() {
-                return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
-            }
-
-            @Override
-            public void serialEvent(SerialPortEvent serialPortEvent) {
-                if (serialPortEvent.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
-                    return;
-                byte[] newData = new byte[port.bytesAvailable()];
-                int numRead = port.readBytes(newData, newData.length);
-                if (numRead > 0) {
-                    for (int i = 0; i < newData.length; ++i) {
-                        if ((char) newData[i] == '\n' || (char) newData[i] == '\r') {
-                            readline = readline.trim();
-                            if (readline.length() > 0) receive(readline);
-                            readline = "";
-                        } else
-                            readline = readline + (char) newData[i];
-                    }
-                }
-            }
-        });
-    }*/
-
     @Override
-    public void alarmOn() throws InterruptedException {
+    public void alarmOn(){
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsAlarm[commandIndex]); // pick a command from an array and send it to USB
     }
 
     @Override
-    public void alarmOff() throws InterruptedException {
+    public void alarmOff() {
         this.isOn = false; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsAlarm[commandIndex]); // pick a command from an array and send it to USB
     }
 
     @Override
-    public void fan() throws InterruptedException {
+    public void fan(){
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsFanHigh[commandIndex]); // pick a command from an array and send it to USB
     }
 
     @Override
-    public void fanMedium() throws InterruptedException {
+    public void fanMedium(){
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsFanMedium[commandIndex]); // pick a command from an array and send it to USB
     }
 
     @Override
-    public void fanOff() throws InterruptedException {
+    public void fanOff(){
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsFanOff[commandIndex]); // pick a command from an array and send it to USB
     }
 
     @Override
-    public void fanLow() throws InterruptedException {
+    public void fanLow(){
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsFanLow[commandIndex]); // pick a command from an array and send it to USB
     }
 
-
-   /* protected void receive(String line) {
-        System.out.println(line);
-        System.out.println(line);
-        sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
-        System.out.println("i have sent outdoor");
-        if (readline.startsWith("thermometer")) {
-            String[] words = readline.split(" ");
-            String str = words[1].replaceAll("[^\\.0123456789]", ""); // remove all non-digits
-            double temp = Double.parseDouble(str);
-            myClient.sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
-            System.out.println("in sending");
-            myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + line + "'}");
-            myClient.sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
-            if (temp > 15) {
-                String formattedTemp = String.format(Locale.getDefault(), "%.1f", temp);
-                myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + formattedTemp + "'}");
-
-                System.out.println(formattedTemp);
-                System.out.println("i am in formated temp");
-
-            }
-
-        }
-    }*/
 }

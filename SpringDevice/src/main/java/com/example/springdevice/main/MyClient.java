@@ -17,13 +17,11 @@ import javax.websocket.*;
 
 @ClientEndpoint
 public class MyClient {
-    private static final Arduino AdruinoCon = new Arduino("COM3", 9600);
-    SmartHouse smartHouse;
     Session userSession = null;
     private MessageHandler messageHandler;
     private ArduinoService arduinoService = new ArduinoService();
 
-    public MyClient(URI endpointURI) throws InterruptedException {
+    public MyClient(URI endpointURI){
         try {
 
             WebSocketContainer container = ContainerProvider
@@ -49,14 +47,13 @@ public class MyClient {
 
     }
 
-
     @OnClose
     public void onClose(Session userSession, CloseReason reason) {
         this.userSession = null;
     }
 
     @OnMessage
-    public void onMessage(String message) throws JSONException, IOException, InterruptedException {
+    public void onMessage(String message) throws JSONException,InterruptedException {
 
         System.out.println("Connected with the server");
         readMessage(message);
@@ -75,7 +72,7 @@ public class MyClient {
         void handleMessage(String message);
     }
 
-    public void readMessage(String message) throws JSONException, InterruptedException, IOException {
+    public void readMessage(String message) throws JSONException, InterruptedException{
         //The smart house look like exactly the same for smartHouse class in the server side
 
         // Incoming message will be two parts as you can see first one is the operation and here it will be ("changeDeviceStatus") always, and the payLoad is the JSOn one
@@ -121,7 +118,7 @@ public class MyClient {
         }
     }
 
-    public void handleLamp(String deviceId, String status) throws InterruptedException, JSONException {
+    public void handleLamp(String deviceId, String status) throws JSONException {
         System.out.println("i am in hanldelapm method");
         if (deviceId.equalsIgnoreCase("Outdoor lamp") && status.equalsIgnoreCase("true")) {
             arduinoService.ledOn();
@@ -151,7 +148,7 @@ public class MyClient {
         }
     }
 
-    public void handleAlarm(String deviceId, String status) throws InterruptedException, JSONException, IOException {
+    public void handleAlarm(String deviceId, String status) throws JSONException{
         if (deviceId.equalsIgnoreCase("alarm") && status.equalsIgnoreCase("true")) {
             System.out.println("i am in true in method handlealarm");
             arduinoService.alarmOn();
@@ -179,7 +176,7 @@ public class MyClient {
         }
     }
 
-    public void handleTemp(String deviceId) throws InterruptedException {
+    public void handleTemp(String deviceId){
         if (deviceId.equalsIgnoreCase("thermometer")) {
             arduinoService.temp();
             // sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
@@ -216,7 +213,7 @@ public class MyClient {
 
     }
 
-    public void handleFan(String deviceId, String status) throws InterruptedException, JSONException {
+    public void handleFan(String deviceId, String status) throws JSONException {
         if (deviceId.equalsIgnoreCase("Bedroom Fan") && status.equalsIgnoreCase("2")) {
             System.out.println("i am in true in method handlefan");
             arduinoService.fan();
