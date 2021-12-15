@@ -3,6 +3,7 @@ package com.example.springdevice.service;
 import arduino.Arduino;
 import com.example.springdevice.SpringDeviceApplication;
 import com.example.springdevice.main.MyClient;
+import java.io.IOException;
 import org.springframework.stereotype.Service;
 
 import com.fazecast.jSerialComm.*;
@@ -53,34 +54,35 @@ public class ArduinoService implements ArduinoConnect {
     String[] commandsFanLow = {"Low"};
     String[] commandsFanOff = {"Off"};
 
+    public ArduinoService() throws InterruptedException {
+    }
+
     public void smartHouse() {
         AdruinoCon.openConnection();
         temp();
-    }
 
-    public void sendMessage(String message) {
-        this.userSession.getAsyncRemote().sendText(message);
     }
-
+    @Override
+    public void temp(){
+        //AdruinoCon.serialWrite(String.valueOf(this.commandsTemp));
+        String duckit  = AdruinoCon.serialRead();
+        //String fuckit = AdruinoCon.serialRead(10); denna funkar för få det till java. Ska testa de ovanför om de funkar
+        for (int j = 0; j < duckit.length(); ++j) {
+            System.out.print(duckit);
+        }
+        //System.out.println(fuckit);
+        //myClient.sendMessage("temperature={'_id':'Livingroom Thermometer', 'device':'thermometer', 'status':'" + fuckit + "'}");
+    }
     @Override
     public void ledOn() {
-        // AdruinoCon.openConnection(); //open connection
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB
 
     }
-    @Override
-    public void temp(){
-        String fuckit = AdruinoCon.serialRead(10);
-        System.out.println(fuckit);
-        myClient.sendMessage("temperature={'_id':'Livingroom Thermometer','device':'thermometer','status':'" + fuckit + "'}");
-    }
-
 
     @Override
     public void ledOff() {
-        //AdruinoCon.openConnection();
         this.isOn = false; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commands[commandIndex]); // pick a command from an array and send it to USB
@@ -88,7 +90,6 @@ public class ArduinoService implements ArduinoConnect {
 
     @Override
     public void ledInsideOn() {
-        //AdruinoCon.openConnection(); //open connection
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsInside[commandIndex]); // pick a command from an array and send it to USB
@@ -96,14 +97,13 @@ public class ArduinoService implements ArduinoConnect {
 
     @Override
     public void ledInsideOff() throws InterruptedException {
-        // AdruinoCon.openConnection();
         this.isOn = false; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsInside[commandIndex]); // pick a command from an array and send it to USB
     }
 
-    @Override
-    public void recivietemp() {
+
+/*    public void recivietemp() {
         SerialPort port = SerialPort.getCommPort(portName);
         port.openPort();
         port.addDataListener(new SerialPortDataListener() {
@@ -130,11 +130,10 @@ public class ArduinoService implements ArduinoConnect {
                 }
             }
         });
-    }
+    }*/
 
     @Override
     public void alarmOn() throws InterruptedException {
-        //AdruinoCon.openConnection(); //open connection
         this.isOn = true; // if the current state is TRUE we set it to FALSE
         int commandIndex = 0; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsAlarm[commandIndex]); // pick a command from an array and send it to USB
@@ -142,7 +141,6 @@ public class ArduinoService implements ArduinoConnect {
 
     @Override
     public void alarmOff() throws InterruptedException {
-        //AdruinoCon.openConnection(); //open connection
         this.isOn = false; // if the current state is TRUE we set it to FALSE
         int commandIndex = 1; // false = 0; true = 1
         AdruinoCon.serialWrite(this.commandsAlarm[commandIndex]); // pick a command from an array and send it to USB
@@ -177,7 +175,7 @@ public class ArduinoService implements ArduinoConnect {
     }
 
 
-    protected void receive(String line) {
+   /* protected void receive(String line) {
         System.out.println(line);
         System.out.println(line);
         sendMessage("confirmation={'_id':'Outdoor lamp','device':'lamp','status':'true','result':'success'}");
@@ -200,5 +198,5 @@ public class ArduinoService implements ArduinoConnect {
             }
 
         }
-    }
+    }*/
 }

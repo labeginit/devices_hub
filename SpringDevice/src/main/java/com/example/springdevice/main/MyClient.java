@@ -41,9 +41,8 @@ public class MyClient {
      * @param userSession the userSession which is opened.
      */
     @OnOpen
-    public void onOpen(Session userSession) throws InterruptedException {
+    public void onOpen(Session userSession){
         this.userSession = userSession;
-        ArduinoService arduinoService = new ArduinoService();
         arduinoService.smartHouse();
 
 
@@ -182,7 +181,7 @@ public class MyClient {
 
     public void handleTemp(String deviceId) throws InterruptedException {
         if (deviceId.equalsIgnoreCase("thermometer")) {
-            arduinoService.recivietemp();
+            arduinoService.temp();
             // sendMessage("temperature={'_id':'Livingroom Thermometer',devide:'thermometer','status':'19'}");//status ska bytas ut med det som arduino
             // skickar
         }
