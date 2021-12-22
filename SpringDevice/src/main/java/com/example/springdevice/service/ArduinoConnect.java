@@ -7,11 +7,15 @@ interface ArduinoConnect {
 
     void ledOff() throws InterruptedException;
 
+    void heater() throws InterruptedException;
+
+    void heaterOff() throws InterruptedException;
+
     void ledInsideOn() throws InterruptedException;
 
     void ledInsideOff() throws InterruptedException;
 
-    /*void recivietemp() throws InterruptedException;*/
+    //void recivietemp() throws InterruptedException;
 
     void alarmOn() throws InterruptedException;
 
